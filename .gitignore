@@ -99,3 +99,8 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+mlplatform/.idea/
+mlplatform/mlplatform/__pycache__/
+mlplatform/malepy/__pycache__/
+
