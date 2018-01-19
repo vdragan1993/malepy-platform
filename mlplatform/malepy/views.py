@@ -6,6 +6,7 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from .models import User, Enrollment
+from .forms import CourseForm
 
 
 def index(request):
@@ -65,3 +66,30 @@ def dashboard(request):
         context = {"enrollments": enrollments}
 
     return render(request, 'malepy/dashboard.html', context=context)
+
+
+@login_required(login_url='/')
+def create_course_form(request):
+    """
+    Redirect to create new course form
+    """
+    form = CourseForm()
+    context = {"action": "Create", "model": "Course", "form": form}
+    return render(request, 'malepy/actions.html', context=context)
+
+
+@login_required(login_url='/')
+def create_course(request):
+    if request.method == 'POST':
+        form = CourseForm(request.POST)
+        if form.is_valid():
+            # save new course
+            new_course = form.save()
+            # enrol user to the new course
+            new_enrolment = Enrollment.objects.create(user=request.user, course=new_course)
+            new_enrolment.save()
+            # redirect to dashboard
+            return redirect('malepy:dashboard')
+        else:
+            context = {"action": "Create", "model": "Course", "form": form}
+            return render(request, 'malepy/actions.html', context=context)

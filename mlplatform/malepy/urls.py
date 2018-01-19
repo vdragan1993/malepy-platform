@@ -8,4 +8,6 @@ urlpatterns = [
     url(r'^login/$', views.login, name='login'),
     url(r'^logout/$', views.logout, name='logout'),
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
+    url(r'^create_course_from/$', views.create_course_form, name='create_course_form'),
+    url(r'^create_course/$', views.create_course, name='create_course'),
 ]
