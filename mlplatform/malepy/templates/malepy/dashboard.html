@@ -93,7 +93,14 @@
                             <li><span class="small text-muted">Name</span><p>{{ user.first_name }} {{ user.last_name }}</p></li>
                         {% endif %}
                         <li><span class="small text-muted">Joined</span><p>{{ user.date_joined|date:"d-M-Y" }}</p></li>
+
+                        {% if not user.user_role %}
+                            <hr>
+                            <h4>Actions</h4>
+                            <li><a href=""><button class="btn btn-action">Create new Course</button></a></li>
+                        {% endif %}
 					</ul>
+
 				</div>
 
 			</aside>
