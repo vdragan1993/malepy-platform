@@ -57,66 +57,9 @@
             <!-- Article main content -->
 			<article class="col-sm-8 maincontent">
 				<header class="page-header">
-                    {% if action == 'Create' %}
-                        <h1 class="page-title">{{ action }} new {{ model }}</h1>
-                    {% else %}
-                        <h1 class="page-title">{{ action }} existing {{ model }}</h1>
-                    {% endif %}
+					<h1 class="page-title">{{ course.shortcut }}</h1>
 				</header>
-
-                <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-					<div class="panel panel-default">
-						<div class="panel-body">
-							<h3 class="thin text-center">{{ action }} {{ model }}</h3>
-							<hr>
-
-                            {% if form.non_field_errors %}
-                                    <p id="error_message">{{ form.non_field_errors }}</p>
-                                    <hr>
-                            {% endif %}
-
-                            {% if action == 'Create' %}
-                                {% if model == 'Course' %}
-                                    <form action="{% url 'malepy:create_course' %}" method="post">
-                                {% else %}
-                                {% endif %}
-                            {% else %}
-                                {% if model == 'Course' %}
-                                    <form action="{% url 'malepy:update_course' id %}" method="post">
-                                {% else %}
-                                {% endif %}
-                            {% endif %}
-                                {% csrf_token %}
-                                {% for field in form.visible_fields %}
-                                    <div class="top-margin text-left">
-									    <label>{{ field.label }} <span class="text-danger">
-                                            {% if field.help_text is not None %}
-                                                *
-                                            {% endif %}
-                                        </span>
-                                        </label>
-                                        <br>
-									    {{ field }}
-                                        {% if field.errors %}
-                                            <p id="error_message">{{ field.errors|first }}</p>
-                                        {% endif %}
-
-								    </div>
-                                {% endfor %}
-
-								<hr>
-
-								<div class="row">
-									<div class="col-sm-8m text-center">
-										<button class="btn btn-action" type="submit">{{ action }}</button>
-									</div>
-								</div>
-							</form>
-						</div>
-					</div>
-
-				</div>
-
+				<h3>{{ course.name }}({{ course.year }})</h3>
 			</article>
 			<!-- /Article -->
 
@@ -126,9 +69,36 @@
 				<div class="widget">
 					<h4>Profile</h4>
 					<ul class="list-unstyled list-spaces">
-                        <li><span class="small text-muted">Role</span><p>Teacher</p></li>
-                        <li><span class="small text-muted">Name</span><p>{{ user.first_name }} {{ user.last_name }}</p></li>
+                        {% if user.user_role %}
+                            {% if user.members %}
+                                <li><span class="small text-muted">Role</span><p>Team of Students</p></li>
+                                <li><span class="small text-muted">Members</span>
+                                <p>
+                                {% for member in members %}
+                                    {{ member }}
+                                    <br>
+                                {% endfor %}
+                                </p>
+                                </li>
+                            {% else %}
+                                <li><span class="small text-muted">Role</span><p>Student</p></li>
+                                <li><span class="small text-muted">Name</span><p>{{ user.first_name }} {{ user.last_name }}</p></li>
+                            {% endif %}
+
+                        {% else %}
+                            <li><span class="small text-muted">Role</span><p>Teacher</p></li>
+                            <li><span class="small text-muted">Name</span><p>{{ user.first_name }} {{ user.last_name }}</p></li>
+                        {% endif %}
                         <li><span class="small text-muted">Joined</span><p>{{ user.date_joined|date:"d-M-Y" }}</p></li>
+
+                        {% if not user.user_role %}
+                            <hr>
+                            <h4>Actions</h4>
+                            <li><a href="{% url 'malepy:update_course_form' course.id %}"><button class="btn btn-success">Edit this Course</button></a></li>
+                            <li><a href="{% url 'malepy:delete_course' course.id %}"><button class="btn btn-danger">Delete this Course</button></a></li>
+                            <hr>
+                            <li><a href="{% url 'malepy:create_course_form' %}"><button class="btn btn-action">Create new Course</button></a></li>
+                        {% endif %}
 					</ul>
 
 				</div>
@@ -185,7 +155,7 @@
 						<div class="widget-body">
 							<p class="simplenav">
 								<a href="/">Home</a> |
-								<b><a href="/sign">Sign In</a></b>
+								<b><a href="{% url 'malepy:logout' %}">Sign Out</a></b>
 							</p>
 						</div>
 					</div>

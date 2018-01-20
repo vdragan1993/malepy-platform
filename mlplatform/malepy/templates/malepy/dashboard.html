@@ -61,7 +61,7 @@
 				</header>
 				<h3>Courses</h3>
                 {% for enrollment in enrollments %}
-                    <p><b><a href=""> {{ enrollment.course.name }} ({{ enrollment.course.year }})</a></b>, Enrolled: <b>{{ enrollment.enrolled|date:"d-M-Y" }}</b> </p>
+                    <p><b><a href="{% url 'malepy:course' enrollment.course.id %}"> {{ enrollment.course.name }} ({{ enrollment.course.year }})</a></b>, Enrolled: <b>{{ enrollment.enrolled|date:"d-M-Y" }}</b> </p>
                 {% endfor %}
 			</article>
 			<!-- /Article -->

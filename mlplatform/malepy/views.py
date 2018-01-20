@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
-from .models import User, Enrollment
+from .models import User, Enrollment, Course
 from .forms import CourseForm
 
 
@@ -68,10 +68,15 @@ def dashboard(request):
     return render(request, 'malepy/dashboard.html', context=context)
 
 
+"""
+Course views
+"""
+
+
 @login_required(login_url='/')
 def create_course_form(request):
     """
-    Redirect to create new course form
+    Redirect to create new Course form
     """
     form = CourseForm()
     context = {"action": "Create", "model": "Course", "form": form}
@@ -80,6 +85,9 @@ def create_course_form(request):
 
 @login_required(login_url='/')
 def create_course(request):
+    """
+    Creating new Course
+    """
     if request.method == 'POST':
         form = CourseForm(request.POST)
         if form.is_valid():
@@ -89,7 +97,54 @@ def create_course(request):
             new_enrolment = Enrollment.objects.create(user=request.user, course=new_course)
             new_enrolment.save()
             # redirect to dashboard
-            return redirect('malepy:dashboard')
+            return HttpResponseRedirect(reverse('malepy:course', args=(new_course.id, )))
         else:
             context = {"action": "Create", "model": "Course", "form": form}
             return render(request, 'malepy/actions.html', context=context)
+
+
+@login_required(login_url='/')
+def course(request, course_id):
+    """
+    Display Course page
+    """
+    this_course = get_object_or_404(Course, pk=course_id)
+    context = {"course": this_course}
+    return render(request, 'malepy/course.html', context=context)
+
+
+@login_required(login_url='/')
+def update_course_form(request, course_id):
+    """
+    Redirect to update Course form
+    """
+    this_course = get_object_or_404(Course, pk=course_id)
+    form = CourseForm(instance=this_course)
+    context = {"action": "Update", "model": "Course", "form": form, "id": course_id}
+    return render(request, 'malepy/actions.html', context=context)
+
+
+@login_required(login_url='/')
+def update_course(request, course_id):
+    """
+    Update existing Course
+    """
+    if request.method == 'POST':
+        this_course = get_object_or_404(Course, pk=course_id)
+        form = CourseForm(request.POST, instance=this_course)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('malepy:course', args=(course_id, )))
+        else:
+            context = {"action": "Update", "model": "Course", "form": form, "id": course_id}
+            return render(request, 'malepy/actions.html', context=context)
+
+
+@login_required(login_url='/')
+def delete_course(request, course_id):
+    """
+    Delete existing Course
+    """
+    this_course = get_object_or_404(Course, pk=course_id)
+    this_course.delete()
+    return redirect('malepy:dashboard')
