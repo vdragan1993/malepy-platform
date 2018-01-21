@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from .models import User, Enrollment, Course, Assignment
 from .forms import CourseForm, AssignmentForm
 import datetime
+from django.contrib.auth.decorators import user_passes_test
 
 
 def index(request):
@@ -70,11 +71,21 @@ def dashboard(request):
 
 
 """
+Test
+"""
+
+
+def is_teacher(user):
+    return user.user_role == 0
+
+
+"""
 Course views
 """
 
 
 @login_required(login_url='/')
+@user_passes_test(is_teacher, redirect_field_name='/dashboard')
 def create_course_form(request):
     """
     Redirect to create new Course form
@@ -85,6 +96,7 @@ def create_course_form(request):
 
 
 @login_required(login_url='/')
+@user_passes_test(is_teacher, redirect_field_name='/dashboard')
 def create_course(request):
     """
     Creating new Course
@@ -121,6 +133,7 @@ def course(request, course_id):
 
 
 @login_required(login_url='/')
+@user_passes_test(is_teacher, redirect_field_name='/dashboard')
 def update_course_form(request, course_id):
     """
     Redirect to update Course form
@@ -132,6 +145,7 @@ def update_course_form(request, course_id):
 
 
 @login_required(login_url='/')
+@user_passes_test(is_teacher, redirect_field_name='/dashboard')
 def update_course(request, course_id):
     """
     Update existing Course
@@ -148,6 +162,7 @@ def update_course(request, course_id):
 
 
 @login_required(login_url='/')
+@user_passes_test(is_teacher, redirect_field_name='/dashboard')
 def delete_course(request, course_id):
     """
     Delete existing Course
@@ -163,6 +178,7 @@ Assignment views
 
 
 @login_required(login_url='/')
+@user_passes_test(is_teacher, redirect_field_name='/dashboard')
 def create_assignment_form(request, course_id):
     """
     Redirect to create new Assignment form
@@ -175,6 +191,7 @@ def create_assignment_form(request, course_id):
 
 
 @login_required(login_url='/')
+@user_passes_test(is_teacher, redirect_field_name='/dashboard')
 def create_assignment(request):
     """
     Creating new Assignment
@@ -200,6 +217,7 @@ def assignment(request, assignment_id):
 
 
 @login_required(login_url='/')
+@user_passes_test(is_teacher, redirect_field_name='/dashboard')
 def update_assignment_form(request, assignment_id):
     """
     Redirect to update Assignment form
@@ -211,6 +229,7 @@ def update_assignment_form(request, assignment_id):
 
 
 @login_required(login_url='/')
+@user_passes_test(is_teacher, redirect_field_name='/dashboard')
 def update_assignment(request, assignment_id):
     """
     Update existing Assignment
@@ -227,6 +246,7 @@ def update_assignment(request, assignment_id):
 
 
 @login_required(login_url='/')
+@user_passes_test(is_teacher, redirect_field_name='/dashboard')
 def delete_assignment(request, assignment_id):
     """
     Delete existing Assignment
