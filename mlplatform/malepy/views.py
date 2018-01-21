@@ -6,7 +6,8 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from .models import User, Enrollment, Course, Assignment
-from .forms import CourseForm
+from .forms import CourseForm, AssignmentForm
+import datetime
 
 
 def index(request):
@@ -154,3 +155,83 @@ def delete_course(request, course_id):
     this_course = get_object_or_404(Course, pk=course_id)
     this_course.delete()
     return redirect('malepy:dashboard')
+
+
+"""
+Assignment views
+"""
+
+
+@login_required(login_url='/')
+def create_assignment_form(request, course_id):
+    """
+    Redirect to create new Assignment form
+    """
+    this_course = get_object_or_404(Course, pk=course_id)
+    form = AssignmentForm(initial={'course': this_course, 'starting': datetime.datetime.now(),
+                                   'ending': datetime.datetime.now()})
+    context = {"action": "Create", "model": "Assignment", "form": form}
+    return render(request, 'malepy/actions.html', context=context)
+
+
+@login_required(login_url='/')
+def create_assignment(request):
+    """
+    Creating new Assignment
+    """
+    if request.method == 'POST':
+        form = AssignmentForm(request.POST)
+        if form.is_valid():
+            new_assignment = form.save()
+            return HttpResponseRedirect(reverse('malepy:assignment', args=(new_assignment.id, )))
+        else:
+            context = {"action": "Create", "model": "Assignment", "form": form}
+            return render(request, 'malepy/actions.html', context=context)
+
+
+@login_required(login_url='/')
+def assignment(request, assignment_id):
+    """
+    Display Assignment page
+    """
+    this_assignment = get_object_or_404(Assignment, pk=assignment_id)
+    context = {"assignment": this_assignment}
+    return render(request, 'malepy/assignment.html', context=context)
+
+
+@login_required(login_url='/')
+def update_assignment_form(request, assignment_id):
+    """
+    Redirect to update Assignment form
+    """
+    this_assignment = get_object_or_404(Assignment, pk=assignment_id)
+    form = AssignmentForm(instance=this_assignment)
+    context = {"action": "Update", "model": "Assignment", "form": form, "id": assignment_id}
+    return render(request, 'malepy/actions.html', context=context)
+
+
+@login_required(login_url='/')
+def update_assignment(request, assignment_id):
+    """
+    Update existing Assignment
+    """
+    if request.method == 'POST':
+        this_assignment = get_object_or_404(Assignment, pk=assignment_id)
+        form = AssignmentForm(request.POST, instance=this_assignment)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('malepy:assignment', args=(assignment_id, )))
+        else:
+            context = {"action": "Update", "model": "Assignment", "form": form, "id": assignment_id}
+            return render(request, 'malepy/actions.html', context=context)
+
+
+@login_required(login_url='/')
+def delete_assignment(request, assignment_id):
+    """
+    Delete existing Assignment
+    """
+    this_assignment = get_object_or_404(Assignment, pk=assignment_id)
+    redirect_id = this_assignment.course.id
+    this_assignment.delete()
+    return HttpResponseRedirect(reverse('malepy:course', args=(redirect_id, )))

@@ -1,0 +1,25 @@
+{% extends "malepy/user_base.html" %}
+
+{% block article %}
+    <header class="page-header">
+        <h1 class="page-title">{{ assignment.course.shortcut }}</h1>
+    </header>
+    <a href="{% url 'malepy:course' assignment.course.id %}"><h3>{{ assignment.course.name }}({{ assignment.course.year }})</h3></a>
+    <hr>
+    <h4>Assignment: <b>{{ assignment.name_en }}</b></h4>
+    <h5>Started: <b>{{ assignment.starting|date:"d-M-Y @ H:i" }}h</b> - Ending: <b>{{ assignment.ending|date:"d-M-Y @ H:i" }}h</b></h5>
+    <br>
+    <p>{{ assignment.description_en }}</p>
+    <hr>
+    <h5>Training set: <b>{{ assignment.training }}</b></h5>
+    <h5>Test set preview: <b>{{ assignment.fake_testing }}</b></h5>
+    <hr>
+{% endblock %}
+
+{% block actions %}
+    <hr>
+    <h4>Actions</h4>
+    <li><a href="{% url 'malepy:create_assignment_form' assignment.course.id %}"><button class="btn btn-action">Create new Assignment</button></a></li>
+    <li><a href="{% url 'malepy:update_assignment_form' assignment.id %}"><button class="btn btn-success">Update this Assignment</button></a></li>
+    <li><a href="{% url 'malepy:delete_assignment' assignment.id %}"><button class="btn btn-danger">Delete this Assignment</button></a></li>
+{% endblock %}

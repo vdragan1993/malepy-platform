@@ -10,11 +10,7 @@
     </header>
 
     <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h3 class="thin text-center">{{ action }} {{ model }}</h3>
-                <hr>
-
+        <div class="panel panel-body">
                 {% if form.non_field_errors %}
                     <p id="error_message">{{ form.non_field_errors }}</p>
                     <hr>
@@ -24,18 +20,20 @@
                     {% if model == 'Course' %}
                         <form action="{% url 'malepy:create_course' %}" method="post">
                     {% else %}
+                        <form action="{% url 'malepy:create_assignment' %}" method="post">
                     {% endif %}
                 {% else %}
                     {% if model == 'Course' %}
                         <form action="{% url 'malepy:update_course' id %}" method="post">
                     {% else %}
+                        <form action="{% url 'malepy:update_assignment' id %}" method="post">
                     {% endif %}
                 {% endif %}
                 {% csrf_token %}
                 {% for field in form.visible_fields %}
                     <div class="top-margin text-left">
                         <label>{{ field.label }} <span class="text-danger">
-                                            {% if field.help_text is not None %}
+                                            {% if field.field.required %}
                                                 *
                                             {% endif %}
                                         </span>
@@ -58,7 +56,6 @@
                 </div>
                 </form>
             </div>
-        </div>
 
     </div>
 

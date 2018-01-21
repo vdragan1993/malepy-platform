@@ -27,7 +27,7 @@ class Course(models.Model):
     )
 
     def __str__(self):
-        return self.name + " " + str(self.year) + " (" + self.shortcut + ")"
+        return self.name + " " + str(self.year)
 
 
 class Enrollment(models.Model):

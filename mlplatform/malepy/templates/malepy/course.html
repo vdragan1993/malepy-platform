@@ -8,7 +8,7 @@
     <hr>
     <h3>Assignments</h3>
     {% for assignment in assignments %}
-        <p><b><a href=""> {{ assignment.name_en }} </a></b>, Ending: <b>{{ assignment.ending|date:"d-M-Y @ H:i" }}h</b> </p>
+        <p><b><a href="{% url 'malepy:assignment' assignment.id %}"> {{ assignment.name_en }} </a></b>, Ending: <b>{{ assignment.ending|date:"d-M-Y @ H:i" }}h</b> </p>
     {% endfor %}
     {% if not user.user_role %}
         <hr>
@@ -30,5 +30,5 @@
     <li><a href="{% url 'malepy:update_course_form' course.id %}"><button class="btn btn-success">Update this Course</button></a></li>
     <li><a href="{% url 'malepy:delete_course' course.id %}"><button class="btn btn-danger">Delete this Course</button></a></li>
     <hr>
-    <li><a href=""><button class="btn btn-action">Create new Assignment</button></a></li>
+    <li><a href="{% url 'malepy:create_assignment_form' course.id %}"><button class="btn btn-action">Create new Assignment</button></a></li>
 {% endblock %}
