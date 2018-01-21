@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
-from .models import User, Enrollment, Course
+from .models import User, Enrollment, Course, Assignment
 from .forms import CourseForm
 
 
@@ -109,7 +109,13 @@ def course(request, course_id):
     Display Course page
     """
     this_course = get_object_or_404(Course, pk=course_id)
-    context = {"course": this_course}
+    assignments = Assignment.objects.filter(course=this_course).order_by('-ending')
+    enrollments = Enrollment.objects.filter(course=this_course).order_by('enrolled')
+    students = []
+    for enrollment in enrollments:
+        if enrollment.user.user_role:
+            students.append(enrollment.user)
+    context = {"course": this_course, "assignments": assignments, "students": students}
     return render(request, 'malepy/course.html', context=context)
 
 

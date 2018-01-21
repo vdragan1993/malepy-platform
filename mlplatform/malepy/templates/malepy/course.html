@@ -1,188 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-    {% load staticfiles %}
-	<meta name="viewport"    content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="MaLePY - The autograding platform for Machine Learning course assignments">
-	<meta name="author"      content="Dragan Vidakovic">
+{% extends "malepy/user_base.html" %}
 
-	<title>malepy - Machine Learning in Python</title>
+{% block article %}
+    <header class="page-header">
+        <h1 class="page-title">{{ course.shortcut }}</h1>
+    </header>
+    <h3>{{ course.name }}({{ course.year }})</h3>
+    <hr>
+    <h3>Assignments</h3>
+    {% for assignment in assignments %}
+        <p><b><a href=""> {{ assignment.name_en }} </a></b>, Ending: <b>{{ assignment.ending|date:"d-M-Y @ H:i" }}h</b> </p>
+    {% endfor %}
+    {% if not user.user_role %}
+        <hr>
+        <h3>Students/Teams</h3>
+        {% for student in students %}
+            {% if student.members %}
+                <p><b><a href="">{{ student.username }} ({{ student.members }})</a> </b></p>
+            {% else %}
+                <p><b><a href="">{{ student.first_name }} {{ student.last_name }}</a> </b></p>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endblock %}
 
-	<link rel="shortcut icon"  href="{% static 'malepy/images/gt_favicon.png' %}">
-
-	<link rel="stylesheet" media="screen" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
-	<link rel="stylesheet" href="{% static 'malepy/css/bootstrap.min.css' %}">
-	<link rel="stylesheet" href="{% static 'malepy/css/font-awesome.min.css' %}">
-
-	<!-- Custom styles for our template -->
-	<link rel="stylesheet" href="{% static 'malepy/css/bootstrap-theme.css' %}" media="screen" >
-	<link rel="stylesheet" href="{% static 'malepy/css/main.css' %}">
-
-	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!--[if lt IE 9]>
-	<script src="{% static 'malepy/js/html5shiv.js' %}"></script>
-	<script src="{% static 'malepy/js/respond.min.js' %}"></script>
-	<![endif]-->
-</head>
-
-<body class="home">
-	<!-- Fixed navbar -->
-	<div class="navbar navbar-inverse navbar-fixed-top headroom" >
-		<div class="container">
-			<div class="navbar-header">
-				<!-- Button for smallest screens -->
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-				<a class="navbar-brand" href="/"><img src="{% static 'malepy/images/artificial-intelligence.png' %}" alt="MaLePY Platform">malepy</a>
-			</div>
-			<div class="navbar-collapse collapse">
-				<ul class="nav navbar-nav pull-right">
-					<li class="active"><a href="{% url 'malepy:dashboard' %}">Dashboard</a></li>
-					<li><a class="btn" href="/logout">SIGN OUT</a></li>
-				</ul>
-			</div><!--/.nav-collapse -->
-		</div>
-	</div>
-	<!-- /.navbar -->
-
-     <div class="jumbotron top-space">
-		<div class="container">
-        </div>
-    </div>
-
-    <!-- container -->
-	<div class="container">
-
-		<div class="row">
-            <!-- Article main content -->
-			<article class="col-sm-8 maincontent">
-				<header class="page-header">
-					<h1 class="page-title">{{ course.shortcut }}</h1>
-				</header>
-				<h3>{{ course.name }}({{ course.year }})</h3>
-			</article>
-			<!-- /Article -->
-
-			<!-- Sidebar -->
-			<aside class="col-sm-4 sidebar sidebar-right">
-
-				<div class="widget">
-					<h4>Profile</h4>
-					<ul class="list-unstyled list-spaces">
-                        {% if user.user_role %}
-                            {% if user.members %}
-                                <li><span class="small text-muted">Role</span><p>Team of Students</p></li>
-                                <li><span class="small text-muted">Members</span>
-                                <p>
-                                {% for member in members %}
-                                    {{ member }}
-                                    <br>
-                                {% endfor %}
-                                </p>
-                                </li>
-                            {% else %}
-                                <li><span class="small text-muted">Role</span><p>Student</p></li>
-                                <li><span class="small text-muted">Name</span><p>{{ user.first_name }} {{ user.last_name }}</p></li>
-                            {% endif %}
-
-                        {% else %}
-                            <li><span class="small text-muted">Role</span><p>Teacher</p></li>
-                            <li><span class="small text-muted">Name</span><p>{{ user.first_name }} {{ user.last_name }}</p></li>
-                        {% endif %}
-                        <li><span class="small text-muted">Joined</span><p>{{ user.date_joined|date:"d-M-Y" }}</p></li>
-
-                        {% if not user.user_role %}
-                            <hr>
-                            <h4>Actions</h4>
-                            <li><a href="{% url 'malepy:update_course_form' course.id %}"><button class="btn btn-success">Edit this Course</button></a></li>
-                            <li><a href="{% url 'malepy:delete_course' course.id %}"><button class="btn btn-danger">Delete this Course</button></a></li>
-                            <hr>
-                            <li><a href="{% url 'malepy:create_course_form' %}"><button class="btn btn-action">Create new Course</button></a></li>
-                        {% endif %}
-					</ul>
-
-				</div>
-
-			</aside>
-			<!-- /Sidebar -->
-
-		</div>
-	</div>	<!-- /container -->
-
-
-
-	<footer id="footer" class="top-space">
-
-		<div class="footer1">
-			<div class="container">
-				<div class="row">
-
-					<div class="col-md-3 widget">
-						<h3 class="widget-title">Contact</h3>
-						<div class="widget-body">
-							<p>Send all your questions to:<br>
-								<a href="mailto:vdragan@uns.ac.rs">vdragan@uns.ac.rs</a><br>
-							</p>
-						</div>
-					</div>
-
-					<div class="col-md-3 widget">
-						<h3 class="widget-title">Social</h3>
-						<div class="widget-body">
-							<p class="follow-me-icons">
-								<a href="http://informatika.ftn.uns.ac.rs/"><i class="fa fa-group fa-2"></i></a>
-								<a href="https://github.com/ftn-ai-lab/"><i class="fa fa-github fa-2"></i></a>
-							</p>
-						</div>
-					</div>
-
-					<div class="col-md-6 widget">
-						<h3 class="widget-title">Thank You</h3>
-						<div class="widget-body">
-                            <p>Special thanks to everyone who helped developing and maintaining this platform.</p>
-						</div>
-					</div>
-
-				</div> <!-- /row of widgets -->
-			</div>
-		</div>
-
-		<div class="footer2">
-			<div class="container">
-				<div class="row">
-
-					<div class="col-md-6 widget">
-						<div class="widget-body">
-							<p class="simplenav">
-								<a href="/">Home</a> |
-								<b><a href="{% url 'malepy:logout' %}">Sign Out</a></b>
-							</p>
-						</div>
-					</div>
-
-					<div class="col-md-6 widget">
-						<div class="widget-body">
-							<p class="text-right">
-								Copyright &copy; 2014. Designed by Sergey Pozhilov, <a href="http://gettemplate.com/" rel="designer">gettemplate</a>
-							</p>
-						</div>
-					</div>
-
-				</div> <!-- /row of widgets -->
-			</div>
-		</div>
-
-	</footer>
-
-
-
-
-
-	<!-- JavaScript libs are placed at the end of the document so the pages load faster -->
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-	<script src="{% static 'malepy/js/headroom.min.js' %}"></script>
-	<script src="{% static 'malepy/js/jQuery.headroom.min.js' %}"></script>
-	<script src="{% static 'malepy/js/template.js' %}"></script>
-</body>
-</html>
+{% block actions %}
+    <hr>
+    <h4>Actions</h4>
+    <li><a href="{% url 'malepy:create_course_form' %}"><button class="btn btn-action">Create new Course</button></a></li>
+    <li><a href="{% url 'malepy:update_course_form' course.id %}"><button class="btn btn-success">Update this Course</button></a></li>
+    <li><a href="{% url 'malepy:delete_course' course.id %}"><button class="btn btn-danger">Delete this Course</button></a></li>
+    <hr>
+    <li><a href=""><button class="btn btn-action">Create new Assignment</button></a></li>
+{% endblock %}
