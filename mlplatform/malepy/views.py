@@ -5,12 +5,13 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
-from .models import User, Enrollment, Course, Assignment
-from .forms import CourseForm, AssignmentForm
+from .models import User, Enrollment, Course, Assignment, Submission
+from .forms import CourseForm, AssignmentForm, SubmissionForm
 import datetime
 from django.contrib.auth.decorators import user_passes_test
 import shutil
 from django.conf import settings
+from django.utils import timezone
 
 
 def index(request):
@@ -214,7 +215,21 @@ def assignment(request, assignment_id):
     Display Assignment page
     """
     this_assignment = get_object_or_404(Assignment, pk=assignment_id)
-    context = {"assignment": this_assignment}
+    my_submissions = Submission.objects.filter(user=request.user, assignment__id=assignment_id).order_by('-created')
+    if this_assignment.sorting == 'Asc':
+        assignment_submissions = Submission.objects.filter(assignment__id=assignment_id).order_by('result')
+    else:
+        assignment_submissions = Submission.objects.filter(assignment__id=assignment_id).order_by('-result')
+    leaderboard = []
+    leaderboard_users = []
+    for submission in assignment_submissions:
+        if submission.user.username not in leaderboard_users and submission.valid:
+            leaderboard.append(submission)
+            leaderboard_users.append(submission.user.username)
+    form = SubmissionForm()
+    context = {"assignment": this_assignment, "form": form,
+               "display_submit": this_assignment.starting < timezone.now() < this_assignment.ending,
+               "my_submissions": my_submissions, 'leaderboard': leaderboard}
     return render(request, 'malepy/assignment.html', context=context)
 
 
@@ -262,3 +277,23 @@ def delete_assignment(request, assignment_id):
     except:
         pass
     return HttpResponseRedirect(reverse('malepy:course', args=(redirect_id, )))
+
+
+@login_required(login_url='/')
+def make_submission(request, assignment_id):
+    """
+    Make submission to an Assignment
+    """
+    if request.method == 'POST':
+        this_assignment = get_object_or_404(Assignment, pk=assignment_id)
+        form = SubmissionForm(request.POST, request.FILES)
+        if form.is_valid():
+            new_submission = Submission.objects.create(
+                submitted_file=request.FILES['submitted_file'],
+                user=request.user,
+                assignment=this_assignment
+            )
+            new_submission.save()
+            return HttpResponseRedirect(reverse('malepy:assignment', args=(assignment_id, )))
+        else:
+            return HttpResponseRedirect(reverse('malepy:assignment', args=(assignment_id, )))

@@ -20,7 +20,6 @@ class Course(models.Model):
     Model for Course
     """
     name = models.CharField(max_length=50, null=False, blank=False)
-    shortcut = models.CharField(max_length=10, null=False, blank=False)
     year = models.IntegerField(null=False, blank=False, validators=[MinValueValidator(0)])
     users = models.ManyToManyField(
         User,
@@ -40,7 +39,7 @@ class Enrollment(models.Model):
     enrolled = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.user.username + " enrolled in " + self.course.shortcut
+        return self.user.username + " enrolled in " + str(self.course)
 
 
 def assignment_data_set_directory(instance, filename):
@@ -75,7 +74,7 @@ class Assignment(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null=False, blank=False)
 
     def __str__(self):
-        return self.course.shortcut + "  -  " + self.name_en
+        return str(self.course) + "  -  " + self.name_en
 
     def training_set_name(self):
         if self.training:
@@ -109,7 +108,9 @@ def submitted_file_name(instance, filename):
     """
     Auto assigned name for submitted file
     """
-    return instance.assignment.folder + '/' + instance.user.username + '_' + str(instance.created) + '.' + filename.split('.')[-1]
+    created_date = str(instance.created.day) + str(instance.created.month) + str(instance.created.year) + '_' + \
+                   str(instance.created.hour) + str(instance.created.minute) + str(instance.created.second)
+    return instance.assignment.folder + '/' + instance.user.username + '_' + created_date + '_' + filename
 
 
 class Submission(models.Model):

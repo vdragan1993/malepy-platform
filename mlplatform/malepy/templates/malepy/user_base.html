@@ -93,6 +93,11 @@
                             {% block actions %}
                             {% endblock %}
                         {% endif %}
+
+                        {% if user.user_role %}
+                            {% block submissions %}
+                            {% endblock %}
+                        {% endif %}
 					</ul>
 
 				</div>

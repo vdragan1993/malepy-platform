@@ -104,3 +104,5 @@ mlplatform/.idea/
 mlplatform/mlplatform/__pycache__/
 mlplatform/malepy/__pycache__/
 mlplatform/malepy/migrations/__pycache__/
+mlplatform/malepy/files/
+

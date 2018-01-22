@@ -1,9 +1,6 @@
 {% extends "malepy/user_base.html" %}
 
 {% block article %}
-    <header class="page-header">
-        <h1 class="page-title">{{ assignment.course.shortcut }}</h1>
-    </header>
     <a href="{% url 'malepy:course' assignment.course.id %}"><h3>{{ assignment.course.name }}({{ assignment.course.year }})</h3></a>
     <hr>
     <h4>Assignment: <b>{{ assignment.name_en }}</b></h4>
@@ -13,9 +10,9 @@
     {% if assignment.threshold %}
         <br>
         {% if assignment.sorting == 'Asc' %}
-            <b><p>Acceptance criteria: {{ assignment.measurement }} > {{ assignment.threshold }}</p></b>
+            <p>Acceptance criteria: <b>{{ assignment.measurement }} < {{ assignment.threshold }}</b></p>
         {% else %}
-            <b><p>Acceptance criteria: {{ assignment.measurement }} < {{ assignment.threshold }}</p></b>
+            <p>Acceptance criteria: <b>{{ assignment.measurement }} > {{ assignment.threshold }}</b></p>
         {% endif %}
     {% endif %}
     <hr>
@@ -24,7 +21,45 @@
     {% if not user.user_role %}
         <h5>Test set: <b><a href="{{ assignment.testing_url }}" download>{{ assignment.testing_set_name|last }}</a></b></h5>
     {% endif %}
+
+    {% if user.user_role %}
+        <hr>
+        <h5><b>Submit solution:</b></h5>
+        <form action="{% url 'malepy:make_submission' assignment.id %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form.visible_fields %}
+                {{ field }}
+                {% if field.errors %}
+                    <p id="error_message">{{ field.errors|first }}</p>
+                {% endif %}
+            {% endfor %}
+            <br>
+            <button class="btn btn-action" type="submit">Submit</button>
+        </form>
+    {% endif %}
     <hr>
+    <hr>
+    <h3><b>Leaderboard</b></h3>
+    <table class="table">
+    <thead>
+        <th>Student/Team</th>
+        <th>Created</th>
+        <th class="text-center">{{ assignment.measurement }}</th>
+    </thead>
+    <tbody>
+    {% for submission in leaderboard %}
+        {% if submission.approved %}
+            <tr class="bg-success">
+        {% else %}
+            <tr class="bg-danger">
+        {% endif %}
+            <td>{{ submission.user.username }}</td>
+            <td>{{ submission.created| date:"d-M-Y @ H:i" }}h</td>
+            <td class="text-center">{{ submission.result }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
 {% endblock %}
 
 {% block actions %}
@@ -33,4 +68,27 @@
     <li><a href="{% url 'malepy:create_assignment_form' assignment.course.id %}"><button class="btn btn-action">Create new Assignment</button></a></li>
     <li><a href="{% url 'malepy:update_assignment_form' assignment.id %}"><button class="btn btn-success">Update this Assignment</button></a></li>
     <li><a href="{% url 'malepy:delete_assignment' assignment.id %}"><button class="btn btn-danger">Delete this Assignment</button></a></li>
+{% endblock %}
+
+{% block submissions %}
+    <hr>
+    <h4>My Submissions</h4>
+    <table class="table">
+    <thead>
+        <th>Created</th>
+        <th class="text-center">{{ assignment.measurement }}</th>
+    </thead>
+    <tbody>
+    {% for my_submission in my_submissions %}
+        {% if my_submission.approved %}
+            <tr class="bg-success">
+        {% else %}
+            <tr class="bg-danger">
+        {% endif %}
+            <td>{{ my_submission.created| date:"d-M-Y @ H:i"}}h</td>
+            <td class="text-center">{{ my_submission.result }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
 {% endblock %}

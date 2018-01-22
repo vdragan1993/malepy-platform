@@ -1,19 +1,16 @@
 from django import forms
-from .models import Course, Assignment
+from .models import Course, Assignment, Submission
 
 
 class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
-        fields = ('name', 'year', 'shortcut')
+        fields = ('name', 'year')
         widgets = {
             'year': forms.NumberInput(attrs={
                 'length': 4,
                 'min': 2018,
                 'max': 2050
-            }),
-            'shortcut': forms.TextInput(attrs={
-                'size': 11
             }),
         }
 
@@ -40,4 +37,15 @@ class AssignmentForm(forms.ModelForm):
             }),
             'starting': forms.DateTimeInput(),
             'ending': forms.DateTimeInput(),
+        }
+
+
+class SubmissionForm(forms.ModelForm):
+    class Meta:
+        model = Submission
+        fields = ('submitted_file', )
+        widgets = {
+            'submitted_file': forms.FileInput(attrs={
+                'accept': '.py'
+            })
         }

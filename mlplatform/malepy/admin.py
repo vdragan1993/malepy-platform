@@ -18,8 +18,8 @@ admin.site.register(User, UserAdministration)
 
 
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('id', 'shortcut', 'name', 'year')
-    search_fields = ['name', 'shortcut', 'year']
+    list_display = ('id', 'name', 'year')
+    search_fields = ['name', 'year']
 
 
 admin.site.register(Course, CourseAdmin)
