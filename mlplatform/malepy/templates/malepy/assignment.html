@@ -11,8 +11,11 @@
     <br>
     <p>{{ assignment.description_en }}</p>
     <hr>
-    <h5>Training set: <b>{{ assignment.training }}</b></h5>
-    <h5>Test set preview: <b>{{ assignment.fake_testing }}</b></h5>
+    <h5>Training set: <b><a href="{{ assignment.training_set_url }}" download>{{ assignment.training_set_name|last }}</a></b></h5>
+    <h5>Test set preview: <b><a href="{{ assignment.fake_testing_url }}" download>{{ assignment.fake_testing_set_name|last }}</a></b></h5>
+    {% if not user.user_role %}
+        <h5>Test set: <b><a href="{{ assignment.testing_url }}" download>{{ assignment.testing_set_name|last }}</a></b></h5>
+    {% endif %}
     <hr>
 {% endblock %}
 

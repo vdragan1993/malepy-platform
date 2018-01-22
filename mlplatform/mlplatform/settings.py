@@ -121,3 +121,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'malepy.User'
+
+MEDIA_URL = 'malepy/files/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'malepy/files')

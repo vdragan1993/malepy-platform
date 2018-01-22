@@ -9,6 +9,8 @@ from .models import User, Enrollment, Course, Assignment
 from .forms import CourseForm, AssignmentForm
 import datetime
 from django.contrib.auth.decorators import user_passes_test
+import shutil
+from django.conf import settings
 
 
 def index(request):
@@ -197,7 +199,7 @@ def create_assignment(request):
     Creating new Assignment
     """
     if request.method == 'POST':
-        form = AssignmentForm(request.POST)
+        form = AssignmentForm(request.POST, request.FILES)
         if form.is_valid():
             new_assignment = form.save()
             return HttpResponseRedirect(reverse('malepy:assignment', args=(new_assignment.id, )))
@@ -236,7 +238,7 @@ def update_assignment(request, assignment_id):
     """
     if request.method == 'POST':
         this_assignment = get_object_or_404(Assignment, pk=assignment_id)
-        form = AssignmentForm(request.POST, instance=this_assignment)
+        form = AssignmentForm(request.POST, request.FILES, instance=this_assignment)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('malepy:assignment', args=(assignment_id, )))
@@ -253,5 +255,10 @@ def delete_assignment(request, assignment_id):
     """
     this_assignment = get_object_or_404(Assignment, pk=assignment_id)
     redirect_id = this_assignment.course.id
+    delete_folder = settings.MEDIA_URL + this_assignment.folder
     this_assignment.delete()
+    try:
+        shutil.rmtree(delete_folder)
+    except:
+        pass
     return HttpResponseRedirect(reverse('malepy:course', args=(redirect_id, )))

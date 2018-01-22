@@ -19,7 +19,6 @@ class CourseForm(forms.ModelForm):
 
 
 class AssignmentForm(forms.ModelForm):
-
     class Meta:
         model = Assignment
         fields = ('course', 'name_en', 'name', 'description_en', 'description', 'starting', 'ending',

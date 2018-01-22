@@ -20,13 +20,13 @@
                     {% if model == 'Course' %}
                         <form action="{% url 'malepy:create_course' %}" method="post">
                     {% else %}
-                        <form action="{% url 'malepy:create_assignment' %}" method="post">
+                        <form action="{% url 'malepy:create_assignment' %}" method="post" enctype="multipart/form-data">
                     {% endif %}
                 {% else %}
                     {% if model == 'Course' %}
                         <form action="{% url 'malepy:update_course' id %}" method="post">
                     {% else %}
-                        <form action="{% url 'malepy:update_assignment' id %}" method="post">
+                        <form action="{% url 'malepy:update_assignment' id %}" method="post" enctype="multipart/form-data">
                     {% endif %}
                 {% endif %}
                 {% csrf_token %}
