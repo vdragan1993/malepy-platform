@@ -10,6 +10,14 @@
     <h5>Started: <b>{{ assignment.starting|date:"d-M-Y @ H:i" }}h</b> - Ending: <b>{{ assignment.ending|date:"d-M-Y @ H:i" }}h</b></h5>
     <br>
     <p>{{ assignment.description_en }}</p>
+    {% if assignment.threshold %}
+        <br>
+        {% if assignment.sorting == 'Asc' %}
+            <b><p>Acceptance criteria: {{ assignment.measurement }} > {{ assignment.threshold }}</p></b>
+        {% else %}
+            <b><p>Acceptance criteria: {{ assignment.measurement }} < {{ assignment.threshold }}</p></b>
+        {% endif %}
+    {% endif %}
     <hr>
     <h5>Training set: <b><a href="{{ assignment.training_set_url }}" download>{{ assignment.training_set_name|last }}</a></b></h5>
     <h5>Test set preview: <b><a href="{{ assignment.fake_testing_url }}" download>{{ assignment.fake_testing_set_name|last }}</a></b></h5>

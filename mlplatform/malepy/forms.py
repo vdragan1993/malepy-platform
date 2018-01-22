@@ -22,7 +22,7 @@ class AssignmentForm(forms.ModelForm):
     class Meta:
         model = Assignment
         fields = ('course', 'name_en', 'name', 'description_en', 'description', 'starting', 'ending',
-                  'folder', 'training', 'fake_testing', 'testing')
+                  'folder', 'training', 'fake_testing', 'testing', 'measurement', 'sorting', 'threshold')
         widgets = {
             'name_en': forms.TextInput(attrs={
                 'size': 50

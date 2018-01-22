@@ -54,6 +54,11 @@ class Assignment(models.Model):
     """
     Model for Course Assignments
     """
+    SORTING_CHOICES = (
+        ('Asc', 'Asc'),
+        ('Desc', 'Desc')
+    )
+
     name = models.CharField(max_length=100, null=True, blank=True)
     name_en = models.CharField(max_length=100, null=False, blank=False)
     description = models.CharField(max_length=2000, null=True, blank=True)
@@ -64,6 +69,9 @@ class Assignment(models.Model):
     testing = models.FileField(null=True, blank=True, upload_to=assignment_data_set_directory)
     starting = models.DateTimeField(null=True, blank=True)
     ending = models.DateTimeField(null=True, blank=True)
+    measurement = models.CharField(max_length=50, null=False, blank=False, default='Accuracy')
+    sorting = models.CharField(max_length=4, null=False, blank=False, default='Asc', choices=SORTING_CHOICES)
+    threshold = models.FloatField(null=True, blank=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, null=False, blank=False)
 
     def __str__(self):
