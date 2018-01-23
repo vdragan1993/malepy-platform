@@ -1,0 +1,37 @@
+{% extends "malepy/user_base.html" %}
+
+{% block article %}
+    <header class="page-header">
+        <h1 class="page-title">Submission Info</h1>
+    </header>
+
+    {% if submission.user.members %}
+        <p>Team: <b>{{ submission.user.username }}</b></p>
+        <p>Members: <b>{{ submission.user.members }}</b></p>
+    {% else %}
+        <p>Student: <b>{{ submission.user.first_name }} {{ submission.user.last_name }}</b></p>
+    {% endif %}
+    <br>
+
+    <p>Course: <b><a href="{% url 'malepy:course' submission.assignment.course.id %}">{{ submission.assignment.course.name }}({{ submission.assignment.course.year }})</a> </b></p>
+    <p>Assignment: <b><a href="{% url 'malepy:assignment' submission.assignment.id %}">{{ submission.assignment.name_en }}</a> </b></p>
+    <br>
+    <p>Created: <b>{{ submission.created| date:"d-M-Y @ H:i" }}h</b></p>
+    {% if submission.approved %}
+        <p>Result ({{ submission.assignment.measurement }}): <span class="bg-success"><b>{{ submission.result }}</b></span></p>
+    {% else %}
+        <p>Result ({{ submission.assignment.measurement }}): <span class="bg-danger"><b>{{ submission.result }}</b></span></p>
+    {% endif %}
+    {% if display_download %}
+        <p>Source code: <b><a href="{{ submission.submitted_file_download_url }}" download>Python code</a> </b></p>
+    {% endif %}
+
+{% endblock %}
+
+{% block submissions %}
+    {% if user.id == submission.user.id %}
+        <hr>
+        <h4>Actions</h4>
+        <li><a href="{% url 'malepy:delete_submission' submission.id %}"><button class="btn btn-danger">Delete this Submission</button></a></li>
+    {% endif %}
+{% endblock %}

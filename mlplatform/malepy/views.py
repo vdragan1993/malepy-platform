@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import user_passes_test
 import shutil
 from django.conf import settings
 from django.utils import timezone
+import os
 
 
 def index(request):
@@ -297,3 +298,36 @@ def make_submission(request, assignment_id):
             return HttpResponseRedirect(reverse('malepy:assignment', args=(assignment_id, )))
         else:
             return HttpResponseRedirect(reverse('malepy:assignment', args=(assignment_id, )))
+
+
+@login_required(login_url='/')
+def submission(request, submission_id):
+    """
+    Submission Display page
+    """
+    this_submission = get_object_or_404(Submission, pk=submission_id)
+    display_download = True
+    if request.user.user_role:
+        if request.user.id != this_submission.user.id and timezone.now() < this_submission.assignment.ending:
+            display_download = False
+    context = {"submission": this_submission, "display_download": display_download}
+    return render(request, 'malepy/submission.html', context=context)
+
+
+@login_required(login_url='/')
+def delete_submission(request, submission_id):
+    """
+    Delete Submission
+    """
+    this_submission = get_object_or_404(Submission, pk=submission_id)
+    if request.user.id != this_submission.user.id:
+        return redirect('malepy:dashobard')
+
+    redirect_id = this_submission.assignment.id
+    delete_file = settings.MEDIA_URL + str(this_submission.submitted_file)
+    this_submission.delete()
+    try:
+        os.remove(delete_file)
+    except:
+        pass
+    return HttpResponseRedirect(reverse('malepy:assignment', args=(redirect_id, )))

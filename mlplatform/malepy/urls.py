@@ -21,4 +21,6 @@ urlpatterns = [
     url(r'^update_assignment/(?P<assignment_id>[0-9]+)/$', views.update_assignment, name='update_assignment'),
     url(r'^delete_assignment/(?P<assignment_id>[0-9]+)/$', views.delete_assignment, name='delete_assignment'),
     url(r'^make_submission/(?P<assignment_id>[0-9]+)/$', views.make_submission, name='make_submission'),
+    url(r'^submission/(?P<submission_id>[0-9]+)/$', views.submission, name='submission'),
+    url(r'^delete_submission/(?P<submission_id>[0-9]+)/$', views.delete_submission, name='delete_submission'),
 ]

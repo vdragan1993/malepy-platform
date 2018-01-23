@@ -127,3 +127,6 @@ class Submission(models.Model):
 
     def __str__(self):
         return self.user.username + " for " + str(self.assignment) + " at " + str(self.created)
+
+    def submitted_file_download_url(self):
+        return '/' + settings.MEDIA_URL + str(self.submitted_file)

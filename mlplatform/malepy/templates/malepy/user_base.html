@@ -37,7 +37,7 @@
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav pull-right">
-					<li class="active"><a href="{% url 'malepy:dashboard' %}">Dashboard</a></li>
+					<li><a href="{% url 'malepy:dashboard' %}">Dashboard</a></li>
 					<li><a class="btn" href="{% url 'malepy:logout' %}">SIGN OUT</a></li>
 				</ul>
 			</div><!--/.nav-collapse -->
@@ -178,8 +178,8 @@
 
 
 	<!-- JavaScript libs are placed at the end of the document so the pages load faster -->
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+	<script src="{% static 'malepy/js/jquery.min.js' %}"></script>
+	<script src="{% static 'malepy/js/bootstrap.min.js' %}"></script>
 	<script src="{% static 'malepy/js/headroom.min.js' %}"></script>
 	<script src="{% static 'malepy/js/jQuery.headroom.min.js' %}"></script>
 	<script src="{% static 'malepy/js/template.js' %}"></script>

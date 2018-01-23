@@ -54,7 +54,7 @@
             <tr class="bg-danger">
         {% endif %}
             <td>{{ submission.user.username }}</td>
-            <td>{{ submission.created| date:"d-M-Y @ H:i" }}h</td>
+            <td><a href="{% url 'malepy:submission' submission.id %}">{{ submission.created| date:"d-M-Y @ H:i" }}h</a></td>
             <td class="text-center">{{ submission.result }}</td>
         </tr>
     {% endfor %}
@@ -85,7 +85,7 @@
         {% else %}
             <tr class="bg-danger">
         {% endif %}
-            <td>{{ my_submission.created| date:"d-M-Y @ H:i"}}h</td>
+            <td><a href="{% url 'malepy:submission' my_submission.id %}">{{ my_submission.created| date:"d-M-Y @ H:i"}}h</a></td>
             <td class="text-center">{{ my_submission.result }}</td>
         </tr>
     {% endfor %}
