@@ -338,3 +338,17 @@ def history(request, user_id):
     submissions = Submission.objects.filter(user=this_user).order_by('-created')
     context = {"display_user": this_user, "submissions": submissions}
     return render(request, 'malepy/history.html', context=context)
+
+
+@login_required(login_url='/')
+def toggle_submission_approvement(request, submission_id):
+    """
+    Toggle Submission's approvement
+    """
+    this_submission = get_object_or_404(Submission, pk=submission_id)
+    if this_submission.approved:
+        this_submission.approved = False
+    else:
+        this_submission.approved = True
+    this_submission.save()
+    return HttpResponseRedirect(reverse('malepy:submission', args=(submission_id, )))

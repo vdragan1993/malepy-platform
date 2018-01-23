@@ -28,6 +28,18 @@
 
 {% endblock %}
 
+{% block actions %}
+    <hr>
+    <h4>Actions</h4>
+    <li><a href="{% url 'malepy:toggle_submission_approvement' submission.id %}"><button class="btn btn-action">
+    {% if submission.approved %}
+        Disapprove this Submission
+    {% else %}
+        Approve this Submission
+    {% endif %}
+    </button></a></li>
+{% endblock %}
+
 {% block submissions %}
     {% if user.id == submission.user.id %}
         <hr>

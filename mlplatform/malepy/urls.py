@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^submission/(?P<submission_id>[0-9]+)/$', views.submission, name='submission'),
     url(r'^delete_submission/(?P<submission_id>[0-9]+)/$', views.delete_submission, name='delete_submission'),
     url(r'^history/(?P<user_id>[0-9]+)/$', views.history, name='history'),
+    url(r'^toggle_submission_approvement/(?P<submission_id>[0-9]+)/$', views.toggle_submission_approvement, name='toggle_submission_approvement'),
 ]

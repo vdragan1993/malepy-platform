@@ -12,9 +12,9 @@
         <h3>Students/Teams</h3>
         {% for student in students %}
             {% if student.members %}
-                <p><b><a href="">{{ student.username }} ({{ student.members }})</a> </b></p>
+                <p><b><a href="{% url 'malepy:history' student.id %}">{{ student.username }} ({{ student.members }})</a> </b></p>
             {% else %}
-                <p><b><a href="">{{ student.first_name }} {{ student.last_name }}</a> </b></p>
+                <p><b><a href="{% url 'malepy:history' student.id %}">{{ student.first_name }} {{ student.last_name }}</a> </b></p>
             {% endif %}
         {% endfor %}
     {% endif %}
