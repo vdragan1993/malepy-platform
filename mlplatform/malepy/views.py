@@ -66,11 +66,7 @@ def dashboard(request):
     """
     this_user = get_object_or_404(User, pk=request.user.id)
     enrollments = Enrollment.objects.filter(user=this_user).order_by('-enrolled')
-    if this_user.members:
-        context = {"enrollments": enrollments, "members": this_user.members.split(',')}
-    else:
-        context = {"enrollments": enrollments}
-
+    context = {"enrollments": enrollments}
     return render(request, 'malepy/dashboard.html', context=context)
 
 
@@ -331,3 +327,14 @@ def delete_submission(request, submission_id):
     except:
         pass
     return HttpResponseRedirect(reverse('malepy:assignment', args=(redirect_id, )))
+
+
+@login_required(login_url='/')
+def history(request, user_id):
+    """
+    User Submissions
+    """
+    this_user = get_object_or_404(User, pk=user_id)
+    submissions = Submission.objects.filter(user=this_user).order_by('-created')
+    context = {"display_user": this_user, "submissions": submissions}
+    return render(request, 'malepy/history.html', context=context)

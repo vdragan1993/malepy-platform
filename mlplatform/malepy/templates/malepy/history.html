@@ -1,0 +1,42 @@
+{% extends "malepy/user_base.html" %}
+
+{% block article %}
+    <header class="page-header">
+        <h1 class="page-title">{{ display_user.username }}'s Submissions</h1>
+    </header>
+
+    {% if user.id != display_user.id %}
+        {% if display_user.members %}
+            <p>Team: <b>{{ display_user.username }}</b></p>
+            <p>Members: <b>{{ display_user.members }}</b></p>
+        {% else %}
+            <p>Student: <b>{{ display_user.first_name }} {{ display_user.last_name }}</b></p>
+        {% endif %}
+        <br>
+    {% endif %}
+
+    <table class="table">
+        <thead>
+            <th>Course</th>
+            <th>Assignment</th>
+            <th>Created</th>
+            <th>Measurement</th>
+            <th class="text-center">Result</th>
+        </thead>
+        <tbody>
+            {% for submission in submissions %}
+                {% if submission.approved %}
+                    <tr class="bg-success">
+                {% else %}
+                    <tr class="bg-danger">
+                {% endif %}
+                <td><a href="{% url 'malepy:course' submission.assignment.course.id %}">{{ submission.assignment.course.name }}({{ submission.assignment.course.year }})</a></td>
+                <td><a href="{% url 'malepy:assignment' submission.assignment.id %}">{{ submission.assignment.name_en }}</a></td>
+                <td><a href="{% url 'malepy:submission' submission.id %}">{{ submission.created| date:"d-M-Y @ H:i" }}h</a></td>
+                <td>{{ submission.assignment.measurement }}</td>
+                <td class="text-center">{{ submission.result }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

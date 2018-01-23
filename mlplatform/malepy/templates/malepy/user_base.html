@@ -38,6 +38,9 @@
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav pull-right">
 					<li><a href="{% url 'malepy:dashboard' %}">Dashboard</a></li>
+                    {% if user.user_role %}
+                        <li><a href="{% url 'malepy:history' user.id %}">Submissions</a></li>
+                    {% endif %}
 					<li><a class="btn" href="{% url 'malepy:logout' %}">SIGN OUT</a></li>
 				</ul>
 			</div><!--/.nav-collapse -->
@@ -70,13 +73,7 @@
                         {% if user.user_role %}
                             {% if user.members %}
                                 <li><span class="small text-muted">Role</span><p>Team of Students</p></li>
-                                <li><span class="small text-muted">Members</span>
-                                <p>
-                                {% for member in members %}
-                                    {{ member }}
-                                    <br>
-                                {% endfor %}
-                                </p>
+                                <li><span class="small text-muted">Members</span><p>{{ user.members }}</p>
                                 </li>
                             {% else %}
                                 <li><span class="small text-muted">Role</span><p>Student</p></li>

@@ -53,7 +53,7 @@
         {% else %}
             <tr class="bg-danger">
         {% endif %}
-            <td>{{ submission.user.username }}</td>
+            <td><a href="{% url 'malepy:history' submission.user.id %}">{{ submission.user.username }}</a></td>
             <td><a href="{% url 'malepy:submission' submission.id %}">{{ submission.created| date:"d-M-Y @ H:i" }}h</a></td>
             <td class="text-center">{{ submission.result }}</td>
         </tr>
