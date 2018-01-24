@@ -124,3 +124,6 @@ AUTH_USER_MODEL = 'malepy.User'
 
 MEDIA_URL = 'malepy/files/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'malepy/files')
+
+MAX_FILE_SIZE = 52428800
+MAX_CODE_SIZE = 2097152

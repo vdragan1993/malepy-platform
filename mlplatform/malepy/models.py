@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator
 from django.conf import settings
+from django.core.validators import ValidationError
 
 
 class User(AbstractUser):
@@ -103,6 +104,14 @@ class Assignment(models.Model):
     def testing_url(self):
         return '/' + settings.MEDIA_URL + str(self.testing)
 
+    def clean(self):
+        if self.starting >= self.ending:
+            raise ValidationError("Ending time must be after starting time")
+
+        if self.training.size > settings.MAX_FILE_SIZE or self.fake_testing.size > settings.MAX_FILE_SIZE \
+                or self.fake_testing.size > settings.MAX_FILE_SIZE:
+            raise ValidationError('File size should not exceed 50 MB')
+
 
 def submitted_file_name(instance, filename):
     """
@@ -130,3 +139,7 @@ class Submission(models.Model):
 
     def submitted_file_download_url(self):
         return '/' + settings.MEDIA_URL + str(self.submitted_file)
+
+    def clean(self):
+        if self.submitted_file.size > settings.MAX_CODE_SIZE:
+            raise ValidationError("File size should not exceed 5MB")

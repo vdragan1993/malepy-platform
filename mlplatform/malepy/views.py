@@ -79,6 +79,9 @@ def is_teacher(user):
     return user.user_role == 0
 
 
+def is_student(user):
+    return user.user_role == 1
+
 """
 Course views
 """
@@ -277,6 +280,7 @@ def delete_assignment(request, assignment_id):
 
 
 @login_required(login_url='/')
+@user_passes_test(is_student, redirect_field_name='/dashboard')
 def make_submission(request, assignment_id):
     """
     Make submission to an Assignment
@@ -311,6 +315,7 @@ def submission(request, submission_id):
 
 
 @login_required(login_url='/')
+@user_passes_test(is_student, redirect_field_name='/dashboard')
 def delete_submission(request, submission_id):
     """
     Delete Submission
@@ -341,6 +346,7 @@ def history(request, user_id):
 
 
 @login_required(login_url='/')
+@user_passes_test(is_teacher, redirect_field_name='/dashboard')
 def toggle_submission_approvement(request, submission_id):
     """
     Toggle Submission's approvement
