@@ -1,200 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-    {% load staticfiles %}
-	<meta name="viewport"    content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="MaLePY - The autograding platform for Machine Learning course assignments">
-	<meta name="author"      content="Dragan Vidakovic">
-	
-	<title>malepy - Machine Learning in Python</title>
+{% extends "malepy/default_base.html" %}
 
-	<link rel="shortcut icon"  href="{% static 'malepy/images/gt_favicon.png' %}">
-	
-	<link rel="stylesheet" media="screen" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
-	<link rel="stylesheet" href="{% static 'malepy/css/bootstrap.min.css' %}">
-	<link rel="stylesheet" href="{% static 'malepy/css/font-awesome.min.css' %}">
-
-	<!-- Custom styles for our template -->
-	<link rel="stylesheet" href="{% static 'malepy/css/bootstrap-theme.css' %}" media="screen" >
-	<link rel="stylesheet" href="{% static 'malepy/css/main.css' %}">
-
-	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!--[if lt IE 9]>
-	<script src="{% static 'malepy/js/html5shiv.js' %}"></script>
-	<script src="{% static 'malepy/js/respond.min.js' %}"></script>
-	<![endif]-->
-</head>
-
-<body class="home">
-	<!-- Fixed navbar -->
-	<div class="navbar navbar-inverse navbar-fixed-top headroom" >
-		<div class="container">
-			<div class="navbar-header">
-				<!-- Button for smallest screens -->
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-				<a class="navbar-brand" href="/"><img src="{% static 'malepy/images/artificial-intelligence.png' %}" alt="MaLePY Platform">malepy</a>
-			</div>
-			<div class="navbar-collapse collapse">
-				<ul class="nav navbar-nav pull-right">
-					<li class="active"><a href="/">Home</a></li>
-					<li><a class="btn" href="{% url 'malepy:sign' %}">SIGN IN</a></li>
-				</ul>
-			</div><!--/.nav-collapse -->
-		</div>
-	</div> 
-	<!-- /.navbar -->
-		
-	<!-- Highlights - jumbotron -->
-	<div class="jumbotron top-space">
-		<div class="container">
-			
-			<h3 class="text-center thin">The autograding platform for Machine Learning course assignments</h3>
-			
-			<div class="row">
-				<div class="col-md-3 col-sm-6 highlight">
-					<div class="h-caption"><h4><i class="fa fa-code fa-5"></i>Python-powered</h4></div>
-					<div class="h-body text-center">
-                        <p>This platform was built using the best from <a href="https://www.python.org/">Python 3.5</a> programming language and <a href="https://www.djangoproject.com/">Django</a> Web framework.
-                        It's primarily focused on Python solutions to Machine Learning problems, but it can be easily modified to support scripts from other programming languages.</p>
-					</div>
-				</div>
-				<div class="col-md-3 col-sm-6 highlight">
-					<div class="h-caption"><h4><i class="fa fa-shield fa-5"></i>Secure</h4></div>
-					<div class="h-body text-center">
-						<p>All user data are encrypted and well protected. Uploaded scripts are executed in sandboxes, preventing any harm to the server and user data.
-                        Teachers and Students can only be added to the platform by Administrator.</p>
-					</div>
-				</div>
-				<div class="col-md-3 col-sm-6 highlight">
-					<div class="h-caption"><h4><i class="fa fa-linux fa-5"></i>Open Source</h4></div>
-					<div class="h-body text-center">
-						<p>The platform is Open Source. It was built using Open Source libraries and the whole source code is available on <a href="https://github.com/vdragan1993/malepy-platform">GitHub</a>.
-                        You can run an instance of <b>malepy</b> on your own servers.</p>
-					</div>
-				</div>
-				<div class="col-md-3 col-sm-6 highlight">
-					<div class="h-caption"><h4><i class="fa fa-smile-o fa-5"></i>Plagiarism Detection</h4></div>
-					<div class="h-body text-center">
-						<p>Submitted scripts are analyzed for plagiarism. Platform uses Stanford's <a href="https://theory.stanford.edu/~aiken/moss/">MOSS (Measure of Software Similarity)</a> to analyze
-                        source codes and prevent cheating on the assignments.</p>
-					</div>
-				</div>
-			</div> <!-- /row  -->
-		
-		</div>
-	</div>
-	<!-- /Highlights -->
-
-	<!-- container -->
-	<div class="container">
-
-		<h2 class="text-center top-space">Frequently Asked Questions</h2>
-		<br>
-
-		<div class="row">
-			<div class="col-sm-6">
-				<h3>Why malepy?</h3>
-				<p><b>malepy</b> is an acronym derived from <b>Ma</b>chine <b>Le</b>arning in <b>Python</b>. It was the most harmless name in the moment of its creation.</p>
-			</div>
-			<div class="col-sm-6">
-				<h3>Who can use malepy?</h3>
-				<p>
-                    <b>malepy</b> was initially created for Machine Learning course in 8th semester of Undergraduate Academic Studies
-                    of Software Engineering and Information Technologies at Chair of Informatics, Faculty of Technical Sciences, University of Novi Sad.
-                    As noted above, it's open source, therefore it can be used freely, respecting the MIT license.
-                </p>
-			</div>
-		</div> <!-- /row -->
-
-		<div class="row">
-			<div class="col-sm-6">
-				<h3>Are there any tutorials?</h3>
-				<p>
-					Not yet.
-				</p>
-			</div>
-			<div class="col-sm-6">
-				<h3>Can I customize this platform?</h3>
-				<p>Yes, you can. Scroll down to the Contact section.</p>
-			</div>
-		</div> <!-- /row -->
+{% block menu %}
+    <li class="active"><a href="/">Home</a></li>
+    <li><a class="btn" href="{% url 'malepy:sign' %}">SIGN IN</a></li>
+{% endblock %}
 
 
-</div>	<!-- /container -->
+{% block top_space %}
+    <h3 class="text-center thin">The autograding platform for Machine Learning course assignments</h3>
 
-	<footer id="footer" class="top-space">
+    <div class="row">
+        <div class="col-md-3 col-sm-6 highlight">
+            <div class="h-caption"><h4><i class="fa fa-code fa-5"></i>Python-powered</h4></div>
+            <div class="h-body text-center">
+                <p>This platform was built using the best from <a href="https://www.python.org/">Python 3.5</a> programming language and <a href="https://www.djangoproject.com/">Django</a> Web framework.
+                    It's primarily focused on Python solutions to Machine Learning problems, but it can be easily modified to support scripts from other programming languages.</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 highlight">
+            <div class="h-caption"><h4><i class="fa fa-shield fa-5"></i>Secure</h4></div>
+            <div class="h-body text-center">
+                <p>All user data are encrypted and well protected. Uploaded scripts are executed in sandboxes, preventing any harm to the server and user data.
+                    Teachers and Students can only be added to the platform by Administrator.</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 highlight">
+            <div class="h-caption"><h4><i class="fa fa-linux fa-5"></i>Open Source</h4></div>
+            <div class="h-body text-center">
+                <p>The platform is Open Source. It was built using Open Source libraries and the whole source code is available on <a href="https://github.com/vdragan1993/malepy-platform">GitHub</a>.
+                    You can run an instance of <b>malepy</b> on your own servers.</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 highlight">
+            <div class="h-caption"><h4><i class="fa fa-smile-o fa-5"></i>Plagiarism Detection</h4></div>
+            <div class="h-body text-center">
+                <p>Submitted scripts are analyzed for plagiarism. Platform uses Stanford's <a href="https://theory.stanford.edu/~aiken/moss/">MOSS (Measure of Software Similarity)</a> to analyze
+                    source codes and prevent cheating on the assignments.</p>
+            </div>
+        </div>
+    </div> <!-- /row  -->
+{% endblock %}
 
-		<div class="footer1">
-			<div class="container">
-				<div class="row">
-					
-					<div class="col-md-3 widget">
-						<h3 class="widget-title">Contact</h3>
-						<div class="widget-body">
-							<p>Send all your questions to:<br>
-								<a href="mailto:vdragan@uns.ac.rs">vdragan@uns.ac.rs</a><br>
-							</p>	
-						</div>
-					</div>
+{% block container %}
+    <h2 class="text-center top-space">Frequently Asked Questions</h2>
+    <br>
 
-					<div class="col-md-3 widget">
-						<h3 class="widget-title">Social</h3>
-						<div class="widget-body">
-							<p class="follow-me-icons">
-								<a href="http://informatika.ftn.uns.ac.rs/"><i class="fa fa-group fa-2"></i></a>
-								<a href="https://github.com/ftn-ai-lab/"><i class="fa fa-github fa-2"></i></a>
-							</p>	
-						</div>
-					</div>
+    <div class="row">
+        <div class="col-sm-6">
+            <h3>Why malepy?</h3>
+            <p><b>malepy</b> is an acronym derived from <b>Ma</b>chine <b>Le</b>arning in <b>Python</b>. It was the most harmless name in the moment of its creation.</p>
+        </div>
+        <div class="col-sm-6">
+            <h3>Who can use malepy?</h3>
+            <p>
+                <b>malepy</b> was initially created for Machine Learning course in 8th semester of Undergraduate Academic Studies
+                of Software Engineering and Information Technologies at Chair of Informatics, Faculty of Technical Sciences, University of Novi Sad.
+                As noted above, it's open source, therefore it can be used freely, respecting the MIT license.
+            </p>
+        </div>
+    </div> <!-- /row -->
 
-					<div class="col-md-6 widget">
-						<h3 class="widget-title">Thank You</h3>
-						<div class="widget-body">
-                            <p>Special thanks to everyone who helped developing and maintaining this platform.</p>
-						</div>
-					</div>
+    <div class="row">
+        <div class="col-sm-6">
+            <h3>Are there any tutorials?</h3>
+            <p>
+                Not yet.
+            </p>
+        </div>
+        <div class="col-sm-6">
+            <h3>Can I customize this platform?</h3>
+            <p>Yes, you can. Scroll down to the Contact section.</p>
+        </div>
+    </div> <!-- /row -->
 
-				</div> <!-- /row of widgets -->
-			</div>
-		</div>
-
-		<div class="footer2">
-			<div class="container">
-				<div class="row">
-					
-					<div class="col-md-6 widget">
-						<div class="widget-body">
-							<p class="simplenav">
-								<a href="/">Home</a> |
-								<b><a href="/sign">Sign In</a></b>
-							</p>
-						</div>
-					</div>
-
-					<div class="col-md-6 widget">
-						<div class="widget-body">
-							<p class="text-right">
-								Copyright &copy; 2014. Designed by Sergey Pozhilov, <a href="http://gettemplate.com/" rel="designer">gettemplate</a>
-							</p>
-						</div>
-					</div>
-
-				</div> <!-- /row of widgets -->
-			</div>
-		</div>
-
-	</footer>	
-		
-
-
-
-
-	<!-- JavaScript libs are placed at the end of the document so the pages load faster -->
-	<script src="{% static 'malepy/js/jquery.min.js' %}"></script>
-	<script src="{% static 'malepy/js/bootstrap.min.js' %}"></script>
-	<script src="{% static 'malepy/js/headroom.min.js' %}"></script>
-	<script src="{% static 'malepy/js/jQuery.headroom.min.js' %}"></script>
-	<script src="{% static 'malepy/js/template.js' %}"></script>
-</body>
-</html>
+{% endblock %}

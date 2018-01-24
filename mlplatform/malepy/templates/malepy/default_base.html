@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    {% load staticfiles %}
+	<meta name="viewport"    content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="MaLePY - The autograding platform for Machine Learning course assignments">
+	<meta name="author"      content="Dragan Vidakovic">
+
+	<title>malepy - Machine Learning in Python</title>
+
+	<link rel="shortcut icon"  href="{% static 'malepy/images/gt_favicon.png' %}">
+
+	<link rel="stylesheet" media="screen" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+	<link rel="stylesheet" href="{% static 'malepy/css/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="{% static 'malepy/css/font-awesome.min.css' %}">
+
+	<!-- Custom styles for our template -->
+	<link rel="stylesheet" href="{% static 'malepy/css/bootstrap-theme.css' %}" media="screen" >
+	<link rel="stylesheet" href="{% static 'malepy/css/main.css' %}">
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script src="{% static 'malepy/js/html5shiv.js' %}"></script>
+	<script src="{% static 'malepy/js/respond.min.js' %}"></script>
+	<![endif]-->
+</head>
+
+<body class="home">
+	<!-- Fixed navbar -->
+	<div class="navbar navbar-inverse navbar-fixed-top headroom" >
+		<div class="container">
+			<div class="navbar-header">
+				<!-- Button for smallest screens -->
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+				<a class="navbar-brand" href="/"><img src="{% static 'malepy/images/artificial-intelligence.png' %}" alt="MaLePY Platform">malepy</a>
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav pull-right">
+					{% block menu %}
+                    {% endblock %}
+				</ul>
+			</div><!--/.nav-collapse -->
+		</div>
+	</div>
+	<!-- /.navbar -->
+
+	<!-- Highlights - jumbotron -->
+	<div class="jumbotron top-space">
+		<div class="container">
+            {% block top_space %}
+            {% endblock%}
+		</div>
+	</div>
+	<!-- /Highlights -->
+
+	<!-- container -->
+	<div class="container">
+        {% block container %}
+        {% endblock %}
+    </div>	<!-- /container -->
+
+	<footer id="footer" class="top-space">
+
+		<div class="footer1">
+			<div class="container">
+				<div class="row">
+
+					<div class="col-md-3 widget">
+						<h3 class="widget-title">Contact</h3>
+						<div class="widget-body">
+							<p>Send all your questions to:<br>
+								<a href="mailto:vdragan@uns.ac.rs">vdragan@uns.ac.rs</a><br>
+							</p>
+						</div>
+					</div>
+
+					<div class="col-md-3 widget">
+						<h3 class="widget-title">Social</h3>
+						<div class="widget-body">
+							<p class="follow-me-icons">
+								<a href="http://informatika.ftn.uns.ac.rs/"><i class="fa fa-group fa-2"></i></a>
+								<a href="https://github.com/ftn-ai-lab/"><i class="fa fa-github fa-2"></i></a>
+							</p>
+						</div>
+					</div>
+
+					<div class="col-md-6 widget">
+						<h3 class="widget-title">Thank You</h3>
+						<div class="widget-body">
+                            <p>Special thanks to everyone who helped developing and maintaining this platform.</p>
+						</div>
+					</div>
+
+				</div> <!-- /row of widgets -->
+			</div>
+		</div>
+
+		<div class="footer2">
+			<div class="container">
+				<div class="row">
+
+					<div class="col-md-6 widget">
+						<div class="widget-body">
+							<p class="simplenav">
+								<a href="/">Home</a> |
+								<b><a href="/sign">Sign In</a></b>
+							</p>
+						</div>
+					</div>
+
+					<div class="col-md-6 widget">
+						<div class="widget-body">
+							<p class="text-right">
+								Copyright &copy; 2014. Designed by Sergey Pozhilov, <a href="http://gettemplate.com/" rel="designer">gettemplate</a>
+							</p>
+						</div>
+					</div>
+
+				</div> <!-- /row of widgets -->
+			</div>
+		</div>
+
+	</footer>
+
+
+
+
+
+	<!-- JavaScript libs are placed at the end of the document so the pages load faster -->
+	<script src="{% static 'malepy/js/jquery.min.js' %}"></script>
+	<script src="{% static 'malepy/js/bootstrap.min.js' %}"></script>
+	<script src="{% static 'malepy/js/headroom.min.js' %}"></script>
+	<script src="{% static 'malepy/js/jQuery.headroom.min.js' %}"></script>
+	<script src="{% static 'malepy/js/template.js' %}"></script>
+</body>
+</html>
