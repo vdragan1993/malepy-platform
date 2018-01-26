@@ -34,7 +34,15 @@
                 {% endif %}
             {% endfor %}
             <br>
-            <button class="btn btn-action" type="submit">Submit</button>
+            <div id="loading">
+                <table border="0">
+                    <tr class="text-center">
+                        <td id="spinner"></td>
+                        <td>Processing...</td>
+                    </tr>
+                </table>
+            </div>
+            <button class="btn btn-action" type="submit" id="submission" onclick="loading();">Submit</button>
         </form>
     {% endif %}
     <hr>
