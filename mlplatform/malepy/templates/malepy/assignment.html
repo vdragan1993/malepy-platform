@@ -22,7 +22,7 @@
         <h5>Test set: <b><a href="{{ assignment.testing_url }}" download>{{ assignment.testing_set_name|last }}</a></b></h5>
     {% endif %}
 
-    {% if user.user_role %}
+    {% if user.user_role and display_submit %}
         <hr>
         <h5><b>Submit solution:</b></h5>
         <form action="{% url 'malepy:make_submission' assignment.id %}" method="post" enctype="multipart/form-data">
@@ -63,9 +63,6 @@
 {% endblock %}
 
 {% block actions %}
-    <hr>
-    <h4>Actions</h4>
-    <li><a href="{% url 'malepy:create_assignment_form' assignment.course.id %}"><button class="btn btn-action">Create new Assignment</button></a></li>
     <li><a href="{% url 'malepy:update_assignment_form' assignment.id %}"><button class="btn btn-success">Update this Assignment</button></a></li>
     <li><a href="{% url 'malepy:delete_assignment' assignment.id %}"><button class="btn btn-danger">Delete this Assignment</button></a></li>
 {% endblock %}

@@ -13,6 +13,7 @@ import shutil
 from django.conf import settings
 from django.utils import timezone
 import os
+import subprocess
 
 
 def index(request):
@@ -81,6 +82,7 @@ def is_teacher(user):
 
 def is_student(user):
     return user.user_role == 1
+
 
 """
 Course views
@@ -295,6 +297,28 @@ def make_submission(request, assignment_id):
                 assignment=this_assignment
             )
             new_submission.save()
+            # execute script
+            command_file = settings.MEDIA_URL + str(new_submission.submitted_file)
+            command_train = settings.MEDIA_URL + str(new_submission.assignment.training)
+            command_test = settings.MEDIA_URL + str(new_submission.assignment.testing)
+            command = "python " + command_file + " " + command_train + " " + command_test
+            # call process
+            process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
+            output_lines = process.stdout.readlines()
+            if len(output_lines) > 0:
+                try:
+                    new_submission.result = float(output_lines[-1])
+                    new_submission.valid = True
+                    new_submission.save()
+                except:
+                    new_submission.valid = False
+                    new_submission.approved = False
+                    new_submission.save()
+            else:
+                new_submission.valid = False
+                new_submission.approved = False
+                new_submission.save()
+
             return HttpResponseRedirect(reverse('malepy:assignment', args=(assignment_id, )))
         else:
             return HttpResponseRedirect(reverse('malepy:assignment', args=(assignment_id, )))
