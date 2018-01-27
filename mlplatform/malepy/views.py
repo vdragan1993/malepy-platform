@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
-from .models import User, Enrollment, Course, Assignment, Submission
+from .models import User, Enrollment, Course, Assignment, Submission, Report
 from .forms import CourseForm, AssignmentForm, SubmissionForm
 import datetime
 from django.contrib.auth.decorators import user_passes_test
@@ -14,6 +14,7 @@ from django.conf import settings
 from django.utils import timezone
 import os
 import subprocess
+from .utils import create_moss_report, extract_results, PlagiarismResult
 
 
 def index(request):
@@ -382,3 +383,91 @@ def toggle_submission_approvement(request, submission_id):
         this_submission.approved = True
     this_submission.save()
     return HttpResponseRedirect(reverse('malepy:submission', args=(submission_id, )))
+
+
+@login_required(login_url='/')
+@user_passes_test(is_teacher, redirect_field_name='/dashboard')
+def generate_moss_report(request, assignment_id):
+    """
+    Generate MOSS report for Assignment
+    """
+    this_assignment = get_object_or_404(Assignment, pk=assignment_id)
+    if this_assignment.sorting == 'ASC':
+        assignment_submissions = Submission.objects.filter(assignment__id=assignment_id).order_by('result')
+    else:
+        assignment_submissions = Submission.objects.filter(assignment__id=assignment_id).order_by('-result')
+    leaderboard = []
+    leaderboard_users = []
+    for submission in assignment_submissions:
+        if submission.user.username not in leaderboard_users and submission.valid:
+            leaderboard.append(submission)
+            leaderboard_users.append(submission.user.username)
+    # files to check
+    files = []
+    for submission in leaderboard:
+        files.append(settings.MEDIA_URL + str(submission.submitted_file))
+    folder = settings.MEDIA_URL + this_assignment.folder + "/"
+    detected, file_path = create_moss_report(files, folder)
+    new_report = Report.objects.create(
+        report_file=file_path,
+        plagiarism=detected,
+        assignment=this_assignment
+    )
+    new_report.save()
+    return HttpResponseRedirect(reverse('malepy:report', args=(new_report.id, )))
+
+
+@login_required(login_url='/')
+@user_passes_test(is_teacher, redirect_field_name='/dashboard')
+def report(request, report_id):
+    """
+    Display MOSS Report page
+    """
+    this_report = get_object_or_404(Report, pk=report_id)
+    if this_report.plagiarism:
+        plagiarisms = extract_results(str(this_report.report_file))
+        this_plagiarisms = []
+        for plagiarism in plagiarisms:
+            position = -1 * (len(settings.MEDIA_URL.split("/")) - 1)
+            file_1_parts = plagiarism.file_1.split("/")[position:]
+            file_2_parts = plagiarism.file_2.split("/")[position:]
+            submission1 = Submission.objects.get(submitted_file='/'.join(file_1_parts))
+            submission2 = Submission.objects.get(submitted_file='/'.join(file_2_parts))
+            this_plagiarisms.append(PlagiarismResult(submission1, plagiarism.percentage_1, submission2,
+                                                 plagiarism.percentage_2, plagiarism.lines))
+        context = {"report": this_report, "plagiarisms": this_plagiarisms}
+    else:
+        context = {"report": this_report}
+    return render(request, 'malepy/report.html', context=context)
+
+
+@login_required(login_url='/')
+@user_passes_test(is_teacher, redirect_field_name='/dashboard')
+def reports(request):
+    """
+    Display MOSS Report history
+    """
+    this_user = get_object_or_404(User, pk=request.user.id)
+    enrollments = Enrollment.objects.filter(user=this_user).order_by('-enrolled')
+    course_ids = []
+    for enrollment in enrollments:
+        course_ids.append(enrollment.course.id)
+    this_reports = Report.objects.filter(assignment__course__id__in=course_ids).order_by('-created')
+    context = {"reports": this_reports}
+    return render(request, 'malepy/reports.html', context=context)
+
+
+@login_required(login_url='/')
+@user_passes_test(is_teacher, redirect_field_name='/dashboard')
+def delete_report(request, report_id):
+    """
+    Delete MOSS Report
+    """
+    this_report = get_object_or_404(Report, pk=report_id)
+    delete_file = str(this_report.report_file)
+    this_report.delete()
+    try:
+        os.remove(delete_file)
+    except:
+        pass
+    return redirect('malepy:reports')

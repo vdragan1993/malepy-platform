@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Course, Enrollment, Assignment, Submission
+from .models import User, Course, Enrollment, Assignment, Submission, Report
 
 
 class UserAdministration(UserAdmin):
@@ -47,3 +47,11 @@ class SubmissionAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Submission, SubmissionAdmin)
+
+
+class ReportAdmin(admin.ModelAdmin):
+    list_display = ('id', 'assignment', 'created', 'plagiarism')
+    search_fields = ['assignment__name_en', ]
+
+
+admin.site.register(Report, ReportAdmin)

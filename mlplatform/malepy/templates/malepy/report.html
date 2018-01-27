@@ -1,0 +1,45 @@
+{% extends "malepy/user_base.html" %}
+
+{% block article %}
+    <header class="page-header">
+        <h1 class="page-title">MOSS Report</h1>
+    </header>
+
+    <p>Course: <b><a href="{% url 'malepy:course' report.assignment.course.id %}">{{ report.assignment.course.name }}({{ report.assignment.course.year }})</a> </b></p>
+    <p>Assignment: <b><a href="{% url 'malepy:assignment' report.assignment.id %}">{{ report.assignment.name_en }}</a> </b></p>
+    <br>
+    <p>Created: <b>{{ report.created| date:"d-M-Y @ H:i" }}h</b></p>
+    <p>Full Report: <b><a href="{{ report.report_file_download_url }}" download>Download HTML</a> </b></p>
+
+    {% if report.plagiarism %}
+        <h3 class="text-center bg-danger">Detected Plagiarism</h3>
+        <table class="table">
+            <thead>
+                <th>Submission1 (%)</th>
+                <th>Submission2 (%)</th>
+                <th>Matching Lines</th>
+            </thead>
+            <tbody>
+                {% for plagiarism in plagiarisms %}
+                   <tr>
+                       <td><a href="{% url 'malepy:submission' plagiarism.file_1.id %}">{{ plagiarism.file_1.user.username }}</a> ({{ plagiarism.percentage_1 }})</td>
+                       <td><a href="{% url 'malepy:submission' plagiarism.file_2.id %}">{{ plagiarism.file_2.user.username }}</a> ({{ plagiarism.percentage_2 }})</td>
+                       <td>{{ plagiarism.lines }}</td>
+                   </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h3 class="text-center bg-success">No Plagiarism detected</h3>
+    {% endif %}
+
+
+
+{% endblock %}
+
+{% block actions %}
+    <hr>
+    <h4>Actions</h4>
+    <li><a href="{% url 'malepy:delete_report' report.id %}"><button class="btn btn-action">Delete Report</button></a></li>
+{% endblock %}
+

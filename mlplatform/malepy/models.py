@@ -143,3 +143,19 @@ class Submission(models.Model):
     def clean(self):
         if self.submitted_file.size > settings.MAX_CODE_SIZE:
             raise ValidationError("File size should not exceed 5MB")
+
+
+class Report(models.Model):
+    """
+    Model for MOSS Reports
+    """
+    created = models.DateTimeField(auto_now=True, null=False, blank=False)
+    report_file = models.FileField(null=False, blank=False)
+    plagiarism = models.BooleanField(default=False, null=False, blank=False)
+    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, null=False, blank=False)
+
+    def __str__(self):
+        return str(self.assignment) + " at " + str(self.created)
+
+    def report_file_download_url(self):
+        return '/' + str(self.report_file)

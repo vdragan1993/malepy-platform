@@ -49,6 +49,8 @@
 					<li><a href="{% url 'malepy:dashboard' %}">Dashboard</a></li>
                     {% if user.user_role %}
                         <li><a href="{% url 'malepy:history' user.id %}">Submissions</a></li>
+                    {% else %}
+                        <li><a href="{% url 'malepy:reports' %}">Reports</a></li>
                     {% endif %}
 					<li><a class="btn" href="{% url 'malepy:logout' %}">SIGN OUT</a></li>
 				</ul>

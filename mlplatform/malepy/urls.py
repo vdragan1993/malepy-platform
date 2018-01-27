@@ -25,4 +25,8 @@ urlpatterns = [
     url(r'^delete_submission/(?P<submission_id>[0-9]+)/$', views.delete_submission, name='delete_submission'),
     url(r'^history/(?P<user_id>[0-9]+)/$', views.history, name='history'),
     url(r'^toggle_submission_approvement/(?P<submission_id>[0-9]+)/$', views.toggle_submission_approvement, name='toggle_submission_approvement'),
+    url(r'^generate_moss_report/(?P<assignment_id>[0-9]+)/$', views.generate_moss_report, name='generate_moss_report'),
+    url(r'^report/(?P<report_id>[0-9]+)/$', views.report, name='report'),
+    url(r'^reports/$', views.reports, name='reports'),
+    url(r'^delete_report/(?P<report_id>[0-9]+)/$', views.delete_report, name='delete_report'),
 ]

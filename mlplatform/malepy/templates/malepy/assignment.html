@@ -71,8 +71,13 @@
 {% endblock %}
 
 {% block actions %}
+    <hr>
+    <h4>Actions</h4>
+    <li><a href="{% url 'malepy:create_assignment_form' assignment.course.id %}"><button class="btn btn-action">Create new Assignment</button></a></li>
     <li><a href="{% url 'malepy:update_assignment_form' assignment.id %}"><button class="btn btn-success">Update this Assignment</button></a></li>
     <li><a href="{% url 'malepy:delete_assignment' assignment.id %}"><button class="btn btn-danger">Delete this Assignment</button></a></li>
+    <hr>
+    <li><a href="{% url 'malepy:generate_moss_report' assignment.id %}"><button class="btn btn-info">Run MOSS</button></a></li>
 {% endblock %}
 
 {% block submissions %}
