@@ -41,7 +41,7 @@
 {% endblock %}
 
 {% block submissions %}
-    {% if user.id == submission.user.id %}
+    {% if user.id == submission.user.id and display_delete %}
         <hr>
         <h4>Actions</h4>
         <li><a href="{% url 'malepy:delete_submission' submission.id %}"><button class="btn btn-danger">Delete this Submission</button></a></li>

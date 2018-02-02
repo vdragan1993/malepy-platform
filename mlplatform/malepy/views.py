@@ -335,7 +335,8 @@ def submission(request, submission_id):
     if request.user.user_role:
         if request.user.id != this_submission.user.id and timezone.now() < this_submission.assignment.ending:
             display_download = False
-    context = {"submission": this_submission, "display_download": display_download}
+    context = {"submission": this_submission, "display_download": display_download,
+               "display_delete": timezone.now() < this_submission.assignment.ending}
     return render(request, 'malepy/submission.html', context=context)
 
 
