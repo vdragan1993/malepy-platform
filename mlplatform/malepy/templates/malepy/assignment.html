@@ -77,7 +77,15 @@
     <li><a href="{% url 'malepy:update_assignment_form' assignment.id %}"><button class="btn btn-success">Update this Assignment</button></a></li>
     <li><a href="{% url 'malepy:delete_assignment' assignment.id %}"><button class="btn btn-danger">Delete this Assignment</button></a></li>
     <hr>
-    <li><a href="{% url 'malepy:generate_moss_report' assignment.id %}"><button class="btn btn-info">Run MOSS</button></a></li>
+    <li><a href="{% url 'malepy:generate_moss_report' assignment.id %}"><button class="btn btn-info" id="submission" onclick="loading();">Run MOSS</button></a></li>
+    <div id="loading">
+                <table border="0">
+                    <tr class="text-center">
+                        <td id="spinner"></td>
+                        <td>Processing...</td>
+                    </tr>
+                </table>
+            </div>
 {% endblock %}
 
 {% block submissions %}
