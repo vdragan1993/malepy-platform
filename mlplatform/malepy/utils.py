@@ -45,7 +45,7 @@ def has_results(html):
     """
     Return True if given HTML contains result
     """
-    return "No matches were found" not in html
+    return "No matches were found" not in str(html)
 
 
 def check_results(file_path):
